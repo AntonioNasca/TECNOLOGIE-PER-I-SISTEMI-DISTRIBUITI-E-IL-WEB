@@ -21,8 +21,8 @@ int main(int argc, char * argv[])
 {
 	char buffer[MAXBUF];
 	struct sockaddr_in addr; // server socket's address
-    int s,retcode;	
-    u_int16_t fport;
+        int s,retcode;	
+        u_int16_t fport;
     
     
     
