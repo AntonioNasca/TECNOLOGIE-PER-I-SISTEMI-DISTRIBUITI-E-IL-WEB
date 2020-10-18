@@ -44,7 +44,7 @@ int main(int argc, char * argv[])
     {
 		printf("Problema nella socket\n");
 		exit(-1);
-	}
+    }
 	 
 	fport= argc==4 ? atoi(argv[3]) : FINGER;
 	
@@ -66,7 +66,7 @@ int main(int argc, char * argv[])
     {
 		printf("Errore nell'inviare il messaggio\n");
 		exit(-3);
-	}
+    }
 	
 	//Leggo il messaggio ricevuto dal server
 	while((retcode=read(s,buffer,MAXBUF))!=0)
@@ -74,7 +74,7 @@ int main(int argc, char * argv[])
 		if(retcode==-1)
 		{
 			printf("Problemi sulla socket\n"); exit(4);
- 	    }
+		}
  	    
  	   fprintf(stderr,"Numero di byte letti %d\n",retcode);
  	   write(STDOUT_FILENO,buffer,retcode);	
