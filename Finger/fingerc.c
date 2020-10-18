@@ -11,6 +11,11 @@
 #define MAXBUF 8*1024
 #define FINGER 79
 
+/* Per compilare:
+Prima
+cc -Wall -c -o mkaddr.o mkaddr.c
+Poi
+cc -Wall fingerc.c mkaddr.o -o fingerc */
 
 int main(int argc, char * argv[])
 {
