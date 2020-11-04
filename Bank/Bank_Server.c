@@ -17,7 +17,6 @@
 Quindi manderà due carrateri in più per ogni messaggio
 per questo sul metodo strlen(messaggio) tolgo -3 */
 
-void Answer(char *, char *, int);
 int Checkstring(char *);
 char risposta[100];
 int pronto=0;
