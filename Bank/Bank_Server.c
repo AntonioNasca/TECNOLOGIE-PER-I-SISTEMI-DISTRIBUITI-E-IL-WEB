@@ -86,14 +86,13 @@ int main(int argc, char **argv)
        {
           if((retcode=write(connectsock,&risposta,strlen(risposta)))<0)
           {
-           printf("Problema write()\n");
-           exit(-1);
+             printf("Problema write()\n");
+             exit(-1);
           }
+           
            printf("Invio messaggio-- %d bytes\n",retcode);
            printf("Messaggio inviato %s",risposta);
-
-          
-        }
+       }
 
         if((retcode=read(connectsock,&msg,MAXBUF))<0)
         {
@@ -102,6 +101,7 @@ int main(int argc, char **argv)
         }
            
         msg[retcode]='\0';
+           
         //Ripulisco il char risposta
         for(int i=0;i<=100;i++)
         risposta[i]='\0';
@@ -195,26 +195,21 @@ int Checkstring(char * s)
     }
 
     
-
-
     //Uscire dal conto
     if(s[0]=='[' && s[1]=='Q' && s[strlen(s)-3]==']')
     {
       printf("Il cliente si è disconesso\n");
       return 0;
     }
+    
 
     else
     {
          sprintf(risposta,"Hai scritto male oppure dovevi scrivere prima [Sxyz] se vuoi operare sul conto\n");
-         pronto=1;
-        
+         pronto=1; 
     }
 
     
-
-
-
     return 1;
     
 }
