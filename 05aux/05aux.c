@@ -14,10 +14,11 @@
 int main(int argc, char ** argv)
 {
     char buffer[1024];
-    struct sockaddr_in server,server1;
+    struct sockaddr_in server,server2; //server2 e sock 2 servono per la seconda connessione
     int retcode,sock,sock2;
-    int i=0; //Conto quanti caratteri da conservare
-    char invio[1024],s[1024];
+    int i=0; //Conto i byte che ricevo
+    char invio[1024]; //Conservo i byte che voglio
+    char s[1024]; //Messaggio che ricevo dal Server
 
     //Mi collego la prima volta
     if((sock=socket(AF_INET,SOCK_STREAM,0))<0)
@@ -36,9 +37,11 @@ int main(int argc, char ** argv)
         exit(-1);
     }
 
+    
+    printf("----------------------------\n",s);
     printf("Connesso con il server: %s, sulla porta: %d\n",inet_ntoa(server.sin_addr),ntohs(server.sin_port));
 
-    printf("Invio: %s\n",MSG);
+    printf("Invio al Server la stringa: %s",MSG);
 
     //Invio il messaggio
     if((retcode=write(sock,&MSG,sizeof(MSG)))<0)
@@ -63,6 +66,7 @@ int main(int argc, char ** argv)
            if(buffer[i]==']')
            k=0;
 
+        //Fare ATTENZIONE alla ricezione perchè il messaggio da leggere và accapo, quindi controllo che c'è \n
           if(k==1 && buffer[i]!='[' && buffer[i]!='\n')
             {
               
@@ -71,12 +75,15 @@ int main(int argc, char ** argv)
             }
        }
     
-       invio[j]='\r';
+       invio[j]='\r';  //Aggiungo \r\n perchè lo richiede http
        invio[j+1]='\n';
       
     }
 
-     printf("Ricevo dal server %s\n",invio);
+    //Stampo quello che ricevo
+    printf("----------------------------\n",s);
+    printf("Ricevo dal server la stringa: %s",invio);
+    printf("----------------------------\n",s);
 
      close(sock); //Mi disconnetto
 
@@ -91,19 +98,19 @@ int main(int argc, char ** argv)
     }
 
 
-    memset(&server1,0,sizeof(server1));
-    server1.sin_family=AF_INET;
-    inet_aton(IP,&server1.sin_addr);
-    server1.sin_port=htons(PORT);
+    memset(&server2,0,sizeof(server2));
+    server2.sin_family=AF_INET;
+    inet_aton(IP,&server2.sin_addr);
+    server2.sin_port=htons(PORT);
 
-    if(connect(sock,(struct sockaddr *)&server1,sizeof(server1))<0)
+    if(connect(sock,(struct sockaddr *)&server2,sizeof(server2))<0)
     {
         printf("error connect 2\n");
         exit(-1);
     
     }
     
-    printf("Riconnesso al server: IP:%s port:%d\n",inet_ntoa(server1.sin_addr),htons(server1.sin_port));
+    printf("Riconnesso al server: IP:%s port:%d\n",inet_ntoa(server2.sin_addr),htons(server2.sin_port));
     
     if((strncmp(invio,"GET /pappalardo/prova/05b.aux\n",strlen(invio)))==0)
     {
@@ -121,7 +128,7 @@ int main(int argc, char ** argv)
 
     else
     {
-        printf("Ho inviato al server: %s   \n",invio);
+        printf("Ho inviato al server: %s",invio);
     }
     
 
@@ -132,10 +139,10 @@ int main(int argc, char ** argv)
         exit(-1);
     }
 
-    printf("Ho letto: %d bytes \n",retcode);
-    
     printf("----------------------------\n",s);
-    printf("Messaggio dal server: \n%s",s);
+    printf("Ho letto: %d bytes dal Server nella seconda connessione \n",retcode);
+
+    printf("Messaggio dal server: %s\n",s);
   
    
   
