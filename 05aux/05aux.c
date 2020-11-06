@@ -54,6 +54,7 @@ int main(int argc, char ** argv)
     int k=0;
     
     //Leggo e conservo solo i caratteri compresi tra  le parentesi []
+    //K fa da flag per monitorare se leggo [ oppure ]
     while((retcode=read(sock,&buffer,sizeof(buffer)))>0)
     {
        int j=0;
