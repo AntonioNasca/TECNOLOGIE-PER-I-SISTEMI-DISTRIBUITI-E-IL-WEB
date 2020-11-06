@@ -13,13 +13,13 @@
 
 int main(int argc, char ** argv)
 {
-    char buffer;
-    char s[1024];
+    char buffer[1024];
     struct sockaddr_in server,server1;
     int retcode,sock,sock2;
     int i=0; //Conto quanti caratteri da conservare
-    char invio[1024],supp[2914];
+    char invio[1024],s[1024];
 
+    //Mi collego la prima volta
     if((sock=socket(AF_INET,SOCK_STREAM,0))<0)
     {
         printf("error socket\n");
@@ -40,49 +40,54 @@ int main(int argc, char ** argv)
 
     printf("Invio: %s\n",MSG);
 
+    //Invio il messaggio
     if((retcode=write(sock,&MSG,sizeof(MSG)))<0)
     {
         printf("Error write\n");
         exit(-1);
     }
    
-    
+    //Ricevo dati dal server
     int k=0;
-    int boh=0;
+    
     while((retcode=read(sock,&buffer,sizeof(buffer)))>0)
     {
-      if(k==1)
-      {
-         sprintf(s,"%s",&buffer);
-         invio[i]=*s;
-         i++;
-
-      }
-
-      if(strncmp(&buffer,"[",strlen(&buffer))==0)
-      k=1;
+       int j=0;
+       for(int i=0; i<retcode;i++)
+       {
+           if(buffer[i]=='[')
+           k=1;
+           
     
         
-      if(strncmp(&buffer,"]",strlen(&buffer))==0)
-      k=0;
+           if(buffer[i]==']')
+           k=0;
+
+          if(k==1 && buffer[i]!='[' && buffer[i]!='\n')
+            {
+              
+              invio[j]=buffer[i];
+              j++;
+            }
+       }
+    
+       invio[j]='\r';
+       invio[j+1]='\n';
+      
     }
 
-     close(sock);
-    
+     printf("Ricevo dal server %s\n",invio);
 
+     close(sock); //Mi disconnetto
+
+ 
      
-    //Sistemo il messaggio
-    for(int j=0;j<i-1;j++)
-    supp[j]=invio[j];
 
-    supp[i]='\r';
-    supp[i+1]='\n';
-    
-
-    //Mi ricollego 
+    //Mi ricollego allo stesso Server
     if((sock=socket(AF_INET,SOCK_STREAM,0))<0)
     {
         printf("error socket\n");
+        exit(-1);
     }
 
 
@@ -98,23 +103,30 @@ int main(int argc, char ** argv)
     
     }
     
-    printf("Riconnesso al server IP:%s port:%d\n",inet_ntoa(server1.sin_addr),htons(server1.sin_port));
-
+    printf("Riconnesso al server: IP:%s port:%d\n",inet_ntoa(server1.sin_addr),htons(server1.sin_port));
+    
+    if((strncmp(invio,"GET /pappalardo/prova/05b.aux\n",strlen(invio)))==0)
+    {
+        printf("OK\n");
+    }
    
-    if((retcode=write(sock,&supp,sizeof(supp)))<0)
+   
+    //Invio il messaggio prelevato dal Server
+    if((retcode=write(sock,invio,sizeof(invio)))<0)
     {
         printf("Error write 2\n");
         exit(-1);
     }
+     
 
     else
     {
-        printf("Ho inviato al server: %s\n",&supp);
+        printf("Ho inviato al server: %s   \n",invio);
     }
     
 
-    //Leggo
-    if((retcode=read(sock,&s,sizeof(s)))<0)
+    //Leggo il messaggio ricevuto dal Server
+    if((retcode=read(sock,s,sizeof(s)))<0)
     {
         printf("Error read 2\n");
         exit(-1);
@@ -127,7 +139,7 @@ int main(int argc, char ** argv)
   
    
   
-    close(sock);
+    close(sock); //Chiudo la seconda connessione
     
     
 
