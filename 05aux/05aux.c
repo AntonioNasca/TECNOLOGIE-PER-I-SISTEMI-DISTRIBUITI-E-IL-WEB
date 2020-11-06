@@ -53,6 +53,7 @@ int main(int argc, char ** argv)
     //Ricevo dati dal server
     int k=0;
     
+    //Leggo e conservo solo i caratteri compresi tra  le parentesi []
     while((retcode=read(sock,&buffer,sizeof(buffer)))>0)
     {
        int j=0;
