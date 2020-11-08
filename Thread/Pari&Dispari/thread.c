@@ -8,7 +8,7 @@ int n=0;
 pthread_mutex_t mutex;
 pthread_t tO,tE;
 int counter1=0, counter2=0;
-//gcc -o thread thread.c -lpthread
+// per compilare: gcc -o thread thread.c -lpthread
 
 
 void *t_E()
