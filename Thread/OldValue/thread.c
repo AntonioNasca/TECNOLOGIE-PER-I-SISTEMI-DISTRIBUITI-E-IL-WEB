@@ -7,6 +7,7 @@
 pthread_mutex_t mutex;
 pthread_t tA,tB,tC;
 int sample=50;
+// per compilare: gcc -o thread thread.c -lpthread
 
 void *t_A()
 {
