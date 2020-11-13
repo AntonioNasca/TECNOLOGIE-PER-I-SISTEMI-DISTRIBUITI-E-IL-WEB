@@ -202,21 +202,20 @@ char * validate(char * s)
 {
 
     int x,y;
-    char suppx[10],suppy[20];
-    int i=0,j=7;
-    
-    while(i<8)
+    char suppx[10],suppy[2];
+
+    for(int i=0;i<8;i++)
     {
-        suppx[0]=s[i];
-        suppy[0]=s[j];
+       suppx[0]=s[i];
+       x=atoi(suppx);
+       
+       for(int j=i+1;j<8;j++)
+        {
+            suppy[0]=s[j];
+            y=atoi(suppy);
 
-        x=atoi(suppx);
-        y=atoi(suppy);
-
-        i++;
-        j--;
-
-        if(x==y)s="La stringa non è permutabile";
+            if(x==y ) return "Non è permutabile\n";
+        }
     }
 
     
