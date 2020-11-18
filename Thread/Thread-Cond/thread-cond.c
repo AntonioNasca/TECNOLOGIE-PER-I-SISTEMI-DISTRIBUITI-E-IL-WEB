@@ -5,11 +5,11 @@
 #include <time.h>
 
 pthread_mutex_t mutex;
-pthread_cond_t condA,condB;
-pthread_t tA,tB;
+pthread_cond_t condA,condB; //CondA è una variabile di condizione che gestisce solo il tA.
+pthread_t tA,tB;            //CondB è una variabile di condizione che gestisce solo il tB.
 
-int n=0;
-int turn=0;
+int n=0; //Sommo la variabile
+int turn=0; //Dò dei turni ai thread, con turn=1 lavora tB, con turn=0 lavora tA
 
 void *t_A()
 {
